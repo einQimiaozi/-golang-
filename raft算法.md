@@ -4,9 +4,12 @@
 
 当选后候选人成为leader，其任期+1,leader会向其他follower定期发送心跳
 
-如果其中有任何一个follower没有在超时期间内接到leader的心跳，它会再次发起投票选举新的leader，一般某个follower收不到心跳的原因有两个
+如果其中有任何一个follower没有在超时期间内接到leader的心跳，它会再次发起投票选举新的leader，一般某个follower收不到心跳的原因有三个
   - 1.leader挂掉
   - 2.follower被分到另一个区了
+  - 3.follower自己的网路阻塞：这种情况下其实不会触发新选举，因为follower的log index比其他节点要小
+
+关于log index：log index 是一个自增且连续的 ID，它可以作为一条日志唯一标识。节点中最大的 Log Index 也反映了这个节点的状态机是否与集群一致。
 
 如果多个候选人平票，则平票候选人再进行一次选举
 
