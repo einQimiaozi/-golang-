@@ -11,6 +11,8 @@ MemTable：是LSM Tree在内存中还未刷盘的写入数据，这里面的数�
 SSTable（Sorted String Table）：是一个键是有序的，存储字符串形式键值对的磁盘文件。当SSTable太大时，可以将其划分为多个block；我们需要通过 下图中的Index 记录下来每个block的起始位置，那么就可以构建每个SSTable的稀疏索引。这样在读SSTable前，通过Index结构就知道要读取的数据块磁盘位置了。
 图中的每一层就是一个sstable
 
+memtable 写“满”后，会转换为 immutable memtable，顺序追加写入磁盘，所以lsm涉及数据合并
+
 查询：
  - 先从memtable中查询，如果没有命中，则进入磁盘查询
  - 磁盘查询时从lsm顶部向下查询，通过sstable的范围用类似归并的方法查询
