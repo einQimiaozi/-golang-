@@ -1,3 +1,7 @@
+grpc中的远程调用并不是通过反射+动态代理实现的，而是通过使用protobuf对请求响应进行编码解码，直接和语言绑定实现的
+
+protobuf针对不同的语言会将其编译为该语言的代码，方便不同语言｜cs之间远程调用，效率高，不需要cs之间通过反射+动态代理解决
+
 ![grpcimg1](https://github.com/einQimiaozi/-golang-/blob/main/img/截屏2021-12-08%20下午6.50.20.png)
 
 ![grpcimg1](https://github.com/einQimiaozi/-golang-/blob/main/img/截屏2021-12-08%20下午6.51.27.png)
@@ -128,6 +132,17 @@ grpc中如果变更message，尽量使用reversed关键字保留消息编号，�
 ![4](https://github.com/einQimiaozi/-golang-/blob/main/img/4.png)
 
 在grpc中不管是request还是reponse都不能为空，如果不需要传输数据也需要带一个默认值或者空指针
+
+## c/s交互
+
+cs在使用grpc交互的时候有6个行为
+
+  - Magic： 定义cs交互使用的协议，一般默认为http2
+  - SETTINGS：定义链接参数和cs交互前的确认ack，参数并不是单次rpc请求的参数，而是整个链接过程中的参数
+  - HEADERS：grpc的请求头信息
+  - DATA：cs交互具体要传输的数据帧
+  - WINDOW_UPDATE：控制流窗口大小
+  - PING：每次交互检测当前链接是否还可用
 
 
 
