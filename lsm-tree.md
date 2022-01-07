@@ -18,5 +18,9 @@ memtable 写“满”后，会转换为 immutable memtable，顺序追加写入�
  - 磁盘查询时从lsm顶部向下查询，通过sstable的范围用类似归并的方法查询
  - 查询可以是单条查询也可以是范围查询 
 
+lsm tree结构的三个问题
 
+ - 读放大（Read Amplification）。LSM-Tree 的读操作需要从新到旧（从上到下）一层一层查找，直到找到想要的数据。这个过程可能需要不止一次 I/O。特别是 range query 的情况，影响很明显。
+ - 空间放大（Space Amplification）。因为所有的写入都是顺序写（append-only）的，不是 in-place update ，所以过期数据不会马上被清理掉。
+ - 写放大。实际写入 HDD/SSD 的数据大小和程序要求写入数据大小之比。正常情况下，HDD/SSD 观察到的写入数据多于上层程序写入的数据。
 
